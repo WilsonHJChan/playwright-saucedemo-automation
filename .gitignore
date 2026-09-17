@@ -17,3 +17,8 @@ test-results/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Practice files
+tests/test_browser.py
+tests/test_dialogs.py
+tests/test_locators.py
