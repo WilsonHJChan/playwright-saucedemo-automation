@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Virtual environment
+.venv/
+venv/
+
+# Playwright
+playwright-report/
+test-results/
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
