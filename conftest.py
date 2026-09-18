@@ -1,4 +1,5 @@
 import pytest
+import os
 from playwright.sync_api import sync_playwright, Page
 
 from pages.login_page import LoginPage
@@ -11,7 +12,9 @@ from pages.checkout_overview_page import CheckoutOverviewPage
 @pytest.fixture
 def page():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        headless = os.getenv("CI") == "true"
+
+        browser = p.chromium.launch(headless=headless)
         context = browser.new_context()
         page = context.new_page()
 
