@@ -2,9 +2,20 @@
 
 ## Overview
 
-This project is an automated UI testing framework built using Python, Playwright, and pytest.
+This project is a UI automation framework built with Python, Playwright, and pytest using the SauceDemo practice website.
 
-The framework automates common user workflows on the SauceDemo website using the Page Object Model (POM) design pattern and reusable pytest fixtures.
+The project demonstrates the use of the Page Object Model (POM), reusable pytest fixtures, and end-to-end test automation for common e-commerce workflows.
+
+---
+
+## Features
+
+- Automated login testing
+- Product selection and cart validation
+- End-to-end checkout automation
+- Page Object Model architecture
+- Reusable pytest fixture setup
+- Git version control
 
 ---
 
@@ -23,6 +34,7 @@ The framework automates common user workflows on the SauceDemo website using the
 ```
 pages/
     login_page.py
+    login_page.py
     products_page.py
     cart_page.py
     checkout_page.py
@@ -38,15 +50,24 @@ conftest.py
 
 ---
 
-## Current Test Coverage
+## Test Scenarios
 
-- User login
-- Add backpack to cart
-- Complete checkout flow
+### Login
+
+- Valid user login
+
+### Products
+
+- Add Sauce Labs Backpack to cart
+
+### Checkout
+
+- Complete an end-to-end checkout flow
+- Verify successful order confirmation
 
 ---
 
-## Running the Tests
+## Running the Project
 
 ```bash
 python -m pytest -v
@@ -56,8 +77,9 @@ python -m pytest -v
 
 ## Future Improvements
 
-- Invalid login tests
+- Negative login scenarios
 - Checkout validation tests
 - Product sorting tests
-- Parameterized test cases
-- GitHub Actions CI
+- Parameterized test data
+- GitHub Actions CI/CD
+- HTML test reports
