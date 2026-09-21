@@ -10,8 +10,9 @@ from pages.checkout_overview_page import CheckoutOverviewPage
 
 
 @pytest.fixture
-def page():
+def page(request):
     with sync_playwright() as p:
+
         headless = os.getenv("CI") == "true"
 
         browser = p.chromium.launch(headless=headless)
@@ -19,6 +20,11 @@ def page():
         page = context.new_page()
 
         yield page
+
+        if request.node.rep_call.failed:
+            page.screenshot(
+                path=f"screenshots/{request.node.name}.png"
+            )
 
         context.close()
         browser.close()
@@ -29,6 +35,7 @@ def login_page(page: Page):
     page.goto("https://www.saucedemo.com/")
 
     return LoginPage(page)
+
 
 @pytest.fixture
 def logged_in_page(login_page: LoginPage):
@@ -65,3 +72,17 @@ def checkout_overview_page(checkout_page: CheckoutPage):
     checkout_page.click_continue()
 
     return CheckoutOverviewPage(checkout_page.page)
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+
+    outcome = yield
+
+    result = outcome.get_result()
+
+    setattr(
+        item,
+        "rep_" + result.when,
+        result
+    )
