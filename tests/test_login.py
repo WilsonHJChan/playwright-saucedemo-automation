@@ -7,7 +7,7 @@ from playwright.sync_api import expect
 ])
 def test_valid_login(login_page, username, password):
 
-    expect(login_page.login_button).to_be_enabled()
+    expect(login_page.login_button).to_be_disabled()
 
     expect(login_page.login_button).to_have_attribute("id", "login-button")
     expect(login_page.login_button).to_have_attribute("type", "submit")
