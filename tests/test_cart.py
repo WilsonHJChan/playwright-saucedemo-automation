@@ -1,10 +1,10 @@
 from playwright.sync_api import expect
 
 
-def test_checkout(checkout_overview_page):
+def test_backpack_added_to_cart(cart_page):
 
-    checkout_overview_page.finish_order()
+    expect(cart_page.items).to_have_count(1)
 
-    expect(
-        checkout_overview_page.complete_header
-    ).to_have_text("Thank you for your order!")
+    expect(cart_page.items.first).to_have_text(
+        "Sauce Labs Backpack"
+    )

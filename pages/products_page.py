@@ -16,3 +16,6 @@ class ProductsPage:
 
     def add_backpack_to_cart(self):
         self.backpack_add_button.click()
+
+    def open_cart(self):
+        self.cart.click()

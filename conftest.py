@@ -25,13 +25,16 @@ def page():
 
 
 @pytest.fixture
-def logged_in_page(page: Page):
+def login_page(page: Page):
     page.goto("https://www.saucedemo.com/")
 
-    login_page = LoginPage(page)
+    return LoginPage(page)
+
+@pytest.fixture
+def logged_in_page(login_page: LoginPage):
     login_page.login("standard_user", "secret_sauce")
 
-    return page
+    return login_page.page
 
 
 @pytest.fixture

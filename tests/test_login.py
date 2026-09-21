@@ -1,15 +1,11 @@
 import pytest
 from playwright.sync_api import expect
-from pages.login_page import LoginPage
 
 
 @pytest.mark.parametrize("username, password", [
     ("standard_user", "secret_sauce"),
 ])
-def test_valid_login(page, username, password):
-    page.goto("https://www.saucedemo.com/")
-
-    login_page = LoginPage(page)
+def test_valid_login(login_page, username, password):
 
     expect(login_page.login_button).to_be_enabled()
 
@@ -19,20 +15,53 @@ def test_valid_login(page, username, password):
 
     login_page.login(username, password)
 
-    expect(page).to_have_url("https://www.saucedemo.com/inventory.html")
-    expect(page.locator(".title")).to_be_visible()
-    expect(page.locator(".title")).to_have_text("Products")
+    expect(login_page.page).to_have_url(
+        "https://www.saucedemo.com/inventory.html"
+    )
+
+    expect(login_page.page.locator(".title")).to_be_visible()
+    expect(login_page.page.locator(".title")).to_have_text("Products")
 
 
-@pytest.mark.parametrize("username, password", [
-    ("wrong_user", "secret_sauce"),
-    ("standard_user", "wrong_password"),
-    ("wrong_user", "wrong_password"),
+@pytest.mark.parametrize("username, password, expected_error", [
+    (
+        "wrong_user",
+        "secret_sauce",
+        "Epic sadface: Username and password do not match any user in this service"
+    ),
+    (
+        "standard_user",
+        "wrong_password",
+        "Epic sadface: Username and password do not match any user in this service"
+    ),
+    (
+        "wrong_user",
+        "wrong_password",
+        "Epic sadface: Username and password do not match any user in this service"
+    ),
+    (
+        "",
+        "secret_sauce",
+        "Epic sadface: Username is required"
+    ),
+    (
+        "standard_user",
+        "",
+        "Epic sadface: Password is required"
+    ),
+    (
+        "",
+        "",
+        "Epic sadface: Username is required"
+    ),
+    (
+        "locked_out_user",
+        "secret_sauce",
+        "Epic sadface: Sorry, this user has been locked out."
+    ),
 ])
-def test_invalid_login(page, username, password):
-    page.goto("https://www.saucedemo.com/")
+def test_invalid_login(login_page, username, password, expected_error):
 
-    login_page = LoginPage(page)
     login_page.login(username, password)
 
-    expect(login_page.error_message).to_be_visible()
+    expect(login_page.error_message).to_have_text(expected_error)
