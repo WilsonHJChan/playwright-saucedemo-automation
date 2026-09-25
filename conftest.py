@@ -1,5 +1,6 @@
 import pytest
 import os
+import re
 from playwright.sync_api import sync_playwright, Page
 
 from pages.login_page import LoginPage
@@ -17,14 +18,34 @@ def page(request):
 
         browser = p.chromium.launch(headless=headless)
         context = browser.new_context()
+
+        context.tracing.start(
+            screenshots=True,
+            snapshots=True,
+            sources=True
+        )
+
         page = context.new_page()
 
         yield page
 
+        test_name = re.sub(
+            r"[^a-zA-Z0-9_-]",
+            "_",
+            request.node.name
+        )
+
         if request.node.rep_call.failed:
             page.screenshot(
-                path=f"screenshots/{request.node.name}.png"
+                path=f"screenshots/{test_name}.png"
             )
+
+            context.tracing.stop(
+                path=f"traces/{test_name}.zip"
+            )
+
+        else:
+            context.tracing.stop()
 
         context.close()
         browser.close()
