@@ -20,7 +20,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
+          python-version: "3.14"
 
       - name: Install dependencies
         run: |
@@ -33,11 +33,25 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest -v
-      
+          pytest -v --html=report.html
+
+      - name: Upload HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-report
+          path: report.html
+
       - name: Upload screenshots
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: screenshots
           path: screenshots/
+
+      - name: Upload traces
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: traces
+          path: traces/

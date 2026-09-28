@@ -17,4 +17,4 @@ def test_add_backpack(products_page):
 
     products_page.add_backpack_to_cart()
 
-    expect(products_page.cart_badge).to_have_text("1")
+    expect(products_page.cart_badge).to_have_text("999")
